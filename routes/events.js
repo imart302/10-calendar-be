@@ -10,6 +10,7 @@ const { validateJWT } = require('../middlewares/validateJWT');
 const { check } = require('express-validator');
 const { validateFields } = require('../middlewares/validateFields');
 const isDate = require('../helpers/isDate');
+const { validateObjectId } = require('../middlewares/validateObjectId');
 
 const router = express.Router();
 
@@ -19,7 +20,7 @@ router.get('/', async (req, res) => {
   getEvents(req, res);
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', [validateObjectId] , async (req, res) => {
   getEvent(req, res)
 });
 
@@ -36,11 +37,11 @@ router.post(
   }
 );
 
-router.put('/:id', (req, res) => {
+router.put('/:id', [validateObjectId], (req, res) => {
   updateEvent(req, res);
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', [validateObjectId], (req, res) => {
   deleteEvent(req, res);
 });
 

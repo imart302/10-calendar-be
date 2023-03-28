@@ -44,12 +44,27 @@ const getEvents = async (req, res) => {
         .limit(limit);
     }
 
+    const nevents = events.map((event) => {
+      return {
+        id: event._id,
+        title: event.title,
+        notes: event.notes,
+        start: event.start,
+        end: event.end,
+        bgColor: event.bgColor,
+        user: {
+          id: req.uid,
+          name: req.name,
+        },
+      };
+    });
+
     const pagination = {
       page,
       offset: limit,
       count,
       remaining: count - limit * page - events.length,
-      data: events,
+      data: nevents,
     };
 
     return res.json({
@@ -65,9 +80,11 @@ const getEvents = async (req, res) => {
 
 const getEvent = async (req, res) => {
   const { id } = req.params;
+  console.log(id);
 
   try {
     const event = await EventCalendar.findById(id);
+    console.log(`${event.userId}`);
 
     if (!event) {
       return res.status(404).json({
@@ -75,9 +92,26 @@ const getEvent = async (req, res) => {
       });
     }
 
+    if(req.uid !== event.userId.toString()){
+      return res.status(401).json({
+        message: 'Unauthorized'
+      });
+    }
+
     return res.json({
       ok: true,
-      event,
+      event: {
+        id: event._id,
+        title: event.title,
+        notes: event.notes,
+        start: event.start,
+        end: event.end,
+        bgColor: event.bgColor,
+        user: {
+          id: req.uid,
+          name: req.name,
+        }
+      },
     });
   } catch (error) {
     return res.status(500).json({
@@ -103,7 +137,18 @@ const createEvent = async (req, res) => {
 
     return res.json({
       ok: true,
-      event,
+      event: {
+        title: event.title,
+        notes: event.notes,
+        start: event.start,
+        end: event.end,
+        bgColor: event.bgColor,
+        id: event._id,
+        user: {
+          id: req.uid,
+          name: req.name,
+        },
+      },
     });
   } catch (error) {
     return res.status(500).json({
@@ -121,6 +166,12 @@ const deleteEvent = async (req, res) => {
     if (!event) {
       return res.status(404).json({
         message: 'Event not found',
+      });
+    }
+
+    if (event.userId.toString() !== req.uid) {
+      return res.status(401).json({
+        message: 'Unauthorized',
       });
     }
 
@@ -150,6 +201,12 @@ const updateEvent = async (req, res) => {
       });
     }
 
+    if (event.userId.toString() !== req.uid) {
+      return res.status(401).json({
+        message: 'Unauthorized',
+      });
+    }
+
     const { title, notes, start, end, bgColor } = req.body;
 
     if (title) event.title = title;
@@ -162,7 +219,18 @@ const updateEvent = async (req, res) => {
 
     return res.json({
       ok: true,
-      result,
+      event: {
+        id: result._id,
+        title: result.title,
+        notes: result.notes,
+        start: result.start,
+        end: result.end,
+        bgColor: result.bgColor,
+        user: {
+          id: req.uid,
+          name: req.name,
+        }
+      },
     });
   } catch (error) {
     return res.status(500).json({
