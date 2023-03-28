@@ -1,37 +1,31 @@
 const { Schema, model } = require('mongoose');
 
-
-
 const EventSchema = Schema({
-
   start: {
     type: Date,
-    require: true,
+    required: true,
   },
   end: {
     type: Date,
-    require: true,
+    required: true,
   },
   title: {
     type: String,
-    require: true,
-
+    required: true,
   },
   notes: {
     type: String,
   },
   bgColor: {
     type: String,
-    default: "#fafafa",
+    default: '#fafafa',
   },
   userId: {
     type: Schema.Types.ObjectId,
     ref: 'User',
-    require: true,
-  }
-
+    required: true,
+  },
 });
-
 
 const EventCalendar = model('Event', EventSchema);
 
