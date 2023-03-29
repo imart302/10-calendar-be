@@ -30,7 +30,7 @@ const createUser = async (req, res) => {
       message: 'User created',
       user: {
         username: user.username,
-        id: user.id,
+        _id: user._id,
       },
     });
   } catch (error) {
