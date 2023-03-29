@@ -46,14 +46,14 @@ const getEvents = async (req, res) => {
 
     const nevents = events.map((event) => {
       return {
-        id: event._id,
+        _id: event._id,
         title: event.title,
         notes: event.notes,
         start: event.start,
         end: event.end,
         bgColor: event.bgColor,
         user: {
-          id: req.uid,
+          _id: req.uid,
           name: req.name,
         },
       };
@@ -101,14 +101,14 @@ const getEvent = async (req, res) => {
     return res.json({
       ok: true,
       event: {
-        id: event._id,
+        _id: event._id,
         title: event.title,
         notes: event.notes,
         start: event.start,
         end: event.end,
         bgColor: event.bgColor,
         user: {
-          id: req.uid,
+          _id: req.uid,
           name: req.name,
         }
       },
@@ -143,9 +143,9 @@ const createEvent = async (req, res) => {
         start: event.start,
         end: event.end,
         bgColor: event.bgColor,
-        id: event._id,
+        _id: event._id,
         user: {
-          id: req.uid,
+          _id: req.uid,
           name: req.name,
         },
       },
@@ -220,14 +220,14 @@ const updateEvent = async (req, res) => {
     return res.json({
       ok: true,
       event: {
-        id: result._id,
+        _id: result._id,
         title: result.title,
         notes: result.notes,
         start: result.start,
         end: result.end,
         bgColor: result.bgColor,
         user: {
-          id: req.uid,
+          _id: req.uid,
           name: req.name,
         }
       },
