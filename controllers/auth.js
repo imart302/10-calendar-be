@@ -65,7 +65,10 @@ const login = async (req, res) => {
     return res.json({
       ok: true,
       token,
-      uid: userpre.id,
+      user: {
+        name: userpre.username,
+        _id: userpre._id,
+      }
     });
   } catch (error) {
     res.status(500).json({
@@ -83,6 +86,10 @@ const renewToken = (req, res) => {
   res.status(201).json({
     ok: true,
     token: newToken,
+    user: {
+      _id: uid,
+      name: username,
+    }
   });
 };
 
