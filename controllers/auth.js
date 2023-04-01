@@ -79,16 +79,16 @@ const login = async (req, res) => {
 
 const renewToken = (req, res) => {
 
-  const { uid, username } = req;
+  const { uid, name } = req;
 
-  const newToken = generateJWT(uid, username);
+  const newToken = generateJWT(uid, name);
 
   res.status(201).json({
     ok: true,
     token: newToken,
     user: {
       _id: uid,
-      name: username,
+      name: name,
     }
   });
 };

@@ -1,7 +1,7 @@
 const EventCalendar = require('../models/Event');
 
 const getEvents = async (req, res) => {
-  const { start, end, page = 0, limit = 10 } = req.query;
+  const { start, end, page = 0, limit = 25 } = req.query;
 
   try {
     let events = null;
@@ -80,11 +80,9 @@ const getEvents = async (req, res) => {
 
 const getEvent = async (req, res) => {
   const { id } = req.params;
-  console.log(id);
 
   try {
     const event = await EventCalendar.findById(id);
-    console.log(`${event.userId}`);
 
     if (!event) {
       return res.status(404).json({
@@ -97,6 +95,8 @@ const getEvent = async (req, res) => {
         message: 'Unauthorized'
       });
     }
+
+    
 
     return res.json({
       ok: true,
@@ -134,6 +134,7 @@ const createEvent = async (req, res) => {
     });
 
     event.save();
+
 
     return res.json({
       ok: true,
